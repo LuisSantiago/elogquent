@@ -2,9 +2,9 @@
 
 namespace Elogquent\Repositories;
 
+use Elogquent\Contracts\ElogquentRepositoryInterface;
 use Elogquent\Models\ModelChange;
 use Illuminate\Database\Eloquent\Model;
-use Elogquent\Contracts\ElogquentRepositoryInterface;
 
 class ElogquentDatabaseRepository implements ElogquentRepositoryInterface
 {

@@ -2,18 +2,16 @@
 
 namespace Elogquent\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Elogquent\Commands\InstallCommand;
 use Elogquent\Commands\ListCommand;
 use Elogquent\Contracts\ElogquentRepositoryInterface;
 use Elogquent\Repositories\ElogquentDatabaseRepository;
+use Illuminate\Support\ServiceProvider;
 
 class ElogquentServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the service provider.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -23,15 +21,13 @@ class ElogquentServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register(): void
     {
         $this->app->bind(ElogquentRepositoryInterface::class, ElogquentDatabaseRepository::class);
-        if (!app()->configurationIsCached()) {
+        if (! app()->configurationIsCached()) {
             $this->mergeConfigFrom(
-                __DIR__ . '/../config/elogquent.php', 'elogquent'
+                __DIR__.'/../config/elogquent.php', 'elogquent'
             );
         }
 
@@ -39,8 +35,6 @@ class ElogquentServiceProvider extends ServiceProvider
 
     /**
      * Register the package's commands.
-     *
-     * @return void
      */
     protected function registerCommands(): void
     {
@@ -54,8 +48,6 @@ class ElogquentServiceProvider extends ServiceProvider
 
     /**
      * Register the package's publishable resources.
-     *
-     * @return void
      */
     private function registerPublishing(): void
     {
@@ -65,11 +57,11 @@ class ElogquentServiceProvider extends ServiceProvider
                 : 'publishes';
 
             $this->{$publishesMigrationsMethod}([
-                __DIR__ . '/../database/migrations' => database_path('migrations'),
+                __DIR__.'/../database/migrations' => database_path('migrations'),
             ], 'elogquent-migrations');
 
             $this->publishes([
-                __DIR__ . '/../config/elogquent.php' => config_path('elogquent.php'),
+                __DIR__.'/../config/elogquent.php' => config_path('elogquent.php'),
             ], 'elogquent-config');
         }
     }

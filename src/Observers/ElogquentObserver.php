@@ -2,14 +2,12 @@
 
 namespace Elogquent\Observers;
 
-use Illuminate\Database\Eloquent\Model;
 use Elogquent\Contracts\ElogquentRepositoryInterface;
+use Illuminate\Database\Eloquent\Model;
 
 class ElogquentObserver
 {
-    public function __construct(private ElogquentRepositoryInterface $repository)
-    {
-    }
+    public function __construct(private ElogquentRepositoryInterface $repository) {}
 
     public function created(Model $model): void
     {

@@ -2,9 +2,9 @@
 
 namespace Elogquent\Commands;
 
+use Elogquent\Providers\ElogquentServiceProvider;
 use Illuminate\Console\Command;
 use Illuminate\Support\ServiceProvider;
-use Elogquent\Providers\ElogquentServiceProvider;
 use Symfony\Component\Console\Attribute\AsCommand;
 
 #[AsCommand(name: 'elogquent:install')]

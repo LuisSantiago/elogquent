@@ -12,7 +12,7 @@ return [
         'api_token',
         'secret',
         'token',
-        'updated_at'
+        'updated_at',
     ],
     /** Limit the number of logs stored. Set to null to disable the limit
      *  It can be an array to limit the number of logs stored per model,

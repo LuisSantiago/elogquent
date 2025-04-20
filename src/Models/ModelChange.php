@@ -8,8 +8,11 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 class ModelChange extends Model
 {
     protected $guarded = [];
+
     public $timestamps = false;
+
     protected $casts = ['changes' => 'array'];
+
     protected $dates = ['created_at'];
 
     public function model(): MorphToMany
