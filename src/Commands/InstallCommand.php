@@ -2,6 +2,7 @@
 
 namespace Elogquent\Commands;
 
+use Elogquent\Exceptions\ElogquentInstallingError;
 use Elogquent\Providers\ElogquentServiceProvider;
 use Illuminate\Console\Command;
 use Illuminate\Support\ServiceProvider;
@@ -10,19 +11,23 @@ use Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'elogquent:install')]
 class InstallCommand extends Command
 {
-    public $signature = 'Elogquent:install';
+    public $name = 'elogquent:install';
 
     public $description = 'My command';
 
     public function handle(): int
     {
-        $this->comment('Publishing Elogquent Configuration...');
-        $this->callSilent('vendor:publish', ['--tag' => 'Elogquent-config']);
+        try {
+            $this->comment('Publishing Elogquent Configuration...');
+            $this->callSilent('vendor:publish', ['--tag' => 'Elogquent-config']);
 
-        $this->comment('Publishing Elogquent Migrations...');
-        $this->callSilent('vendor:publish', ['--tag' => 'Elogquent-migrations']);
+            $this->comment('Publishing Elogquent Migrations...');
+            $this->callSilent('vendor:publish', ['--tag' => 'Elogquent-migrations']);
 
-        $this->registerElogquentServiceProvider();
+            $this->registerElogquentServiceProvider();
+        }catch (\Exception $e) {
+            throw new ElogquentInstallingError($e->getMessage());
+        }
 
         $this->info('Elogquent installed successfully.');
         $this->newLine();

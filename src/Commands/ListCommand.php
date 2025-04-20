@@ -8,7 +8,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'elogquent:list')]
 class ListCommand extends Command
 {
-    public $signature = 'Elogquent:list';
+    public $name = 'elogquent:list';
 
     public $description = 'My command';
 
