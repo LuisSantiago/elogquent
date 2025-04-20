@@ -27,7 +27,7 @@ class ElogquentServiceProvider extends ServiceProvider
         $this->app->bind(ElogquentRepositoryInterface::class, ElogquentDatabaseRepository::class);
         if (! app()->configurationIsCached()) {
             $this->mergeConfigFrom(
-                __DIR__.'/../config/elogquent.php', 'elogquent'
+                __DIR__.'/../../config/elogquent.php', 'elogquent'
             );
         }
 
@@ -57,11 +57,11 @@ class ElogquentServiceProvider extends ServiceProvider
                 : 'publishes';
 
             $this->{$publishesMigrationsMethod}([
-                __DIR__.'/../database/migrations' => database_path('migrations'),
+                __DIR__.'/../../database/migrations' => database_path('migrations'),
             ], 'elogquent-migrations');
 
             $this->publishes([
-                __DIR__.'/../config/elogquent.php' => config_path('elogquent.php'),
+                __DIR__.'/../../config/elogquent.php' => config_path('elogquent.php'),
             ], 'elogquent-config');
         }
     }

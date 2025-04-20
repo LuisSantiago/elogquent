@@ -62,7 +62,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Elogquent\\ElogquentServiceProvider"
+                "Elogquent\\Providers\\ElogquentServiceProvider"
             ]
         }
     },
