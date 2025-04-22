@@ -21,6 +21,7 @@
     ],
     "require": {
         "php": "^8.2",
+        "laravel/framework": "11.*",
         "laravel/prompts": "^0.3.5"
     },
     "require-dev": {
