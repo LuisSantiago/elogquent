@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ElogquentObserver
 {
-    public function __construct(private ElogquentRepositoryInterface $repository)
-    {
-    }
+    public function __construct(private ElogquentRepositoryInterface $repository) {}
 
     public function updating(Model $model): void
     {
@@ -27,11 +25,11 @@ class ElogquentObserver
         $dirty = $model->getDirty();
 
         $included = config('elogquent.included_columns', []);
-        if (!empty($included)) {
+        if (! empty($included)) {
             $dirty = array_intersect_key($dirty, array_flip($included));
         }
         $excluded = config('elogquent.excluded_columns', []);
-        if (!empty($excluded)) {
+        if (! empty($excluded)) {
             $dirty = array_diff_key($dirty, array_flip($excluded));
         }
 

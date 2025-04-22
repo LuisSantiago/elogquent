@@ -1,4 +1,5 @@
 <?php
+
 // Configuration for Elogquent: Model Change History Tracking
 return [
     'enabled' => env('ELOGQUENT_ENABLED', true),
