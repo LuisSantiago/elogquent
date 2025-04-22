@@ -26,7 +26,7 @@ class InstallCommand extends Command
             $this->callSilent('vendor:publish', ['--tag' => 'elogquent-migrations']);
 
             $this->registerElogquentServiceProvider();
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             throw new ElogquentInstallingError($e->getMessage());
         }
 

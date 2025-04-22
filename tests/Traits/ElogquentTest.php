@@ -15,18 +15,18 @@ it('model uses the trait', function () {
 });
 
 it('registers event listeners when package is enabled', function () {
-    $model = new TestFakeModel();
+    $model = new TestFakeModel;
     $model::bootTraits();
     $model::boot();
 
-    expect(Event::hasListeners('eloquent.updating: ' . TestFakeModel::class))->toBeTrue();
+    expect(Event::hasListeners('eloquent.updating: '.TestFakeModel::class))->toBeTrue();
 });
 
 it('does not register event listeners when package is disabled', function () {
     Config::set('elogquent.enabled', false);
-    $model = new TestFakeModel();
+    $model = new TestFakeModel;
     $model::bootTraits();
     $model::boot();
 
-    expect(Event::hasListeners('eloquent.updating: ' . TestFakeModel::class))->toBeFalse();
+    expect(Event::hasListeners('eloquent.updating: '.TestFakeModel::class))->toBeFalse();
 });

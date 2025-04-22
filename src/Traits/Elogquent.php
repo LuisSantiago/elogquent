@@ -9,7 +9,7 @@ trait Elogquent
 {
     protected static function booted(): void
     {
-        if (!config('elogquent.enabled')) {
+        if (! config('elogquent.enabled')) {
             return;
         }
 
