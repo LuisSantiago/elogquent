@@ -8,6 +8,6 @@ class ElogquentInstallingError extends Exception
 {
     public function __construct(string $error)
     {
-        parent::__construct('Error installing: [' . $error . ']');
+        parent::__construct('Error installing: ['.$error.']');
     }
 }
