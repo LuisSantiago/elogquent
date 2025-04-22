@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 interface ElogquentRepositoryInterface
 {
-    public function create(Model $model): void;
+    public function create(Model $model, ?string $userId = null): void;
 }

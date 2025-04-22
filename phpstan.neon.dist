@@ -15,3 +15,4 @@ parameters:
     ignoreErrors:
         - identifier: function.alreadyNarrowedType
         - identifier: trait.unused
+        - identifier: larastan.noEnvCallsOutsideOfConfig

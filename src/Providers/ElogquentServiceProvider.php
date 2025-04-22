@@ -3,7 +3,7 @@
 namespace Elogquent\Providers;
 
 use Elogquent\Commands\InstallCommand;
-use Elogquent\Commands\ListCommand;
+use Elogquent\Commands\RestoreChangeCommand;
 use Elogquent\Contracts\ElogquentRepositoryInterface;
 use Elogquent\Repositories\ElogquentDatabaseRepository;
 use Illuminate\Support\ServiceProvider;
@@ -41,7 +41,7 @@ class ElogquentServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallCommand::class,
-                ListCommand::class,
+                RestoreChangeCommand::class,
             ]);
         }
     }

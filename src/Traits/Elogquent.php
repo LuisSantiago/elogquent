@@ -9,10 +9,14 @@ trait Elogquent
 {
     protected static function booted(): void
     {
+        if (!config('elogquent.enabled')) {
+            return;
+        }
+
         self::observe('Elogquent\Observers\ElogquentObserver');
     }
 
-    public function versions(): MorphMany
+    public function allChanges(): MorphMany
     {
         return $this->morphMany(ModelChange::class, 'model');
     }

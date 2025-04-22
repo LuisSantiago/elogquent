@@ -3,7 +3,7 @@
 namespace Elogquent\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class ModelChange extends Model
 {
@@ -11,12 +11,18 @@ class ModelChange extends Model
 
     public $timestamps = false;
 
-    protected $casts = ['changes' => 'array'];
+    protected $casts = ['changes' => 'json'];
 
-    protected $dates = ['created_at'];
+    protected array $dates = ['created_at'];
 
-    public function model(): MorphToMany
+    public function modelChanged(): MorphTo
     {
-        return $this->morphedByMany(Model::class, 'model');
+        return $this->morphTo('model', 'model_type', 'model_id');
+    }
+
+    public function restore(): void
+    {
+        $changes = $this->getAttribute('changes');
+        $this->getRelation('modelChanged')->update($changes);
     }
 }

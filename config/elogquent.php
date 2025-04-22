@@ -1,11 +1,18 @@
 <?php
-
-// config for Elogquent
+// Configuration for Elogquent: Model Change History Tracking
 return [
-    'enabled' => true,
-    /** All columns will be stored by default if the include columns array is empty */
-    'include_columns' => [],
-    /** all columns will be stored by default if the include columns array is empty */
+    'enabled' => env('ELOGQUENT_ENABLED', true),
+
+    /**
+     * List of columns to include in the change history.
+     * If empty, all model attributes will be tracked (except those defined in 'excluded_columns').
+     */
+    'included_columns' => [],
+
+    /**
+     * Columns to exclude from the change history.
+     * Ideal for sensitive or irrelevant data such as passwords or tokens.
+     */
     'excluded_columns' => [
         'password',
         'remember_token',
@@ -14,9 +21,11 @@ return [
         'token',
         'updated_at',
     ],
-    /** Limit the number of logs stored. Set to null to disable the limit
-     *  It can be an array to limit the number of logs stored per model,
-     *  for example, ['App\Models\User' => 1000]
+
+    /**
+     * If enabled, consecutive changes for models with identical values will be removed,
+     * keeping only the most recent record for that state.
+     * Helps to prevent redundant entries and reduce log noise.
      */
-    'limit' => null,
+    'remove_previous_duplicates' => env('ELOGQUENT_REMOVE_DUPLICATES', true),
 ];
