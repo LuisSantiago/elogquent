@@ -13,11 +13,8 @@ return [
     'enabled' => env('ELOGQUENT_ENABLED', true),
 
     /*
-    |--------------------------------------------------------------------------
-    | Database Connection
-    |--------------------------------------------------------------------------
     |
-    | Define the database connection to use for storing the change history.
+    | Should store the user who changed the model?
     |
     */
     'store_user_id' => env('ELOGQUENT_STORE_USER_ID', true),
