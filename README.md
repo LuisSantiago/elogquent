@@ -15,6 +15,7 @@ provides a complete history of modifications, allowing you to restore previous s
 <p align="center">
   <img src="assets/RestoreChange.gif" alt="RestoreChange"/>
 </p>
+
 ## Features
 
 - 🔄 Automatic tracking of model changes
