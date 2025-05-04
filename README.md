@@ -76,12 +76,12 @@ $changes = $post->allChanges;
 Restore a model to a previous state:
 
 ```php
-$modelChange = ModelChange::find(1);
+$modelChange = ElogquentEntry::find(1);
 $modelChange->restore();
 ```
 
 You can also use the artisan command:
-```php artisan elogquent:restore-changes```
+`php artisan elogquent:restore-changes`
 
 ## Configuration
 
