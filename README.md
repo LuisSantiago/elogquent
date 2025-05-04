@@ -80,6 +80,9 @@ $modelChange = ModelChange::find(1);
 $modelChange->restore();
 ```
 
+You can also use the artisan command:
+```php artisan elogquent:restore-changes```
+
 ## Configuration
 
 Below are the key options you can configure in the `elogquent.php` configuration file:
@@ -93,6 +96,7 @@ Below are the key options you can configure in the `elogquent.php` configuration
 | `store_user_id`       | Store the authenticated user's ID with each change. | `true`            |
 | `database_connection` | The database connection used for change history.    | Laravel’s default |    
 
+
 📋 Column Filtering
 
 | Option             | Description                                                                                                                                             |
@@ -100,11 +104,13 @@ Below are the key options you can configure in the `elogquent.php` configuration
 | `included_columns` | List of specific columns to track. If empty, all are tracked (except excluded).                                                                         |
 | `excluded_columns` | Columns to ignore (e.g., sensitive or irrelevant ones). Defaults include:<br>`password`, `remember_token`, `api_token`, `secret`, `token`, `updated_at` |
 
+
 🧹 History Optimization
 
 | Option                       | Description                                                        |
 |------------------------------|--------------------------------------------------------------------|
 | `remove_previous_duplicates` | Avoid logging identical consecutive states. Keeps only the latest. |
+
 
 📦 Change Limits
 
@@ -121,9 +127,6 @@ Below are the key options you can configure in the `elogquent.php` configuration
 | `queue.connection` | The queue connection to use.                  | Laravel’s default (`queue.default`) |
 | `queue.queue`      | Name of the queue to handle change jobs.      | `null`                              |
 
-## Security
-
-If you discover any security-related issues, please email security@elogquent.com instead of using the issue tracker.
 
 ## Contributing
 
