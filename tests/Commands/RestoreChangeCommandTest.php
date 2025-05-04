@@ -17,7 +17,7 @@ it('the command select a model and a id to restore', function () {
         ->expectsQuestion('Which model id would you like to restore?', 1)
         ->expectsChoice('Which model attributes you like to restore?', ['name'], ['name'])
         ->expectsChoice('Which change for the column name would you like to restore?',
-            'Luis', ['<fg=green>Luis</> (2025-05-07 10:00:00)', 'Luis']
+            'Luis', ['<fg=green>Luis</> (<fg=white>2025-05-07 10:00:00</>)', 'Luis']
         )
         ->expectsConfirmation('Do you want to restore the changes?', true)
         ->assertExitCode(0);
