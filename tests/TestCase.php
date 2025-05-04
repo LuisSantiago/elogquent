@@ -3,6 +3,7 @@
 namespace Elogquent\Tests;
 
 use Elogquent\ElogquentServiceProvider;
+use Elogquent\Models\ElogquentEntry;
 use Illuminate\Database\Eloquent\Model;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -44,5 +45,11 @@ class TestCase extends Orchestra
             ->andReturn($changes);
 
         return $model;
+    }
+
+    public function createEntryModel(array $attributes = []): ElogquentEntry
+    {
+        return ElogquentEntry::factory()
+            ->create($attributes);
     }
 }

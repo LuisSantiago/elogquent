@@ -15,7 +15,7 @@ class ElogquentDatabaseRepository implements ElogquentRepositoryInterface
     #[Override]
     public function create(
         string $modelClass,
-        string $modelKey,
+        int $modelKey,
         array $changes,
         ?string $userId = null,
     ): void {
@@ -43,7 +43,7 @@ class ElogquentDatabaseRepository implements ElogquentRepositoryInterface
     #[Override]
     public function removeChanges(
         string $modelClass,
-        string $modelKey,
+        int $modelKey,
         array $changes,
     ): void {
         foreach ($changes as $column => $value) {
@@ -57,7 +57,7 @@ class ElogquentDatabaseRepository implements ElogquentRepositoryInterface
     }
 
     #[Override]
-    public function removeExceededLimit(string $modelClass, string $modelKey, int $limit): void
+    public function removeExceededLimit(string $modelClass, int $modelKey, int $limit): void
     {
         $oldestElogquentEntryId = ElogquentEntry::query()
             ->where('model_id', $modelKey)

@@ -8,20 +8,20 @@ interface ElogquentRepositoryInterface
 {
     public function create(
         string $modelClass,
-        string $modelKey,
+        int $modelKey,
         array $changes,
         ?string $userId = null,
     ): void;
 
     public function removeChanges(
         string $modelClass,
-        string $modelKey,
+        int $modelKey,
         array $changes,
     ): void;
 
     public function removeExceededLimit(
         string $modelClass,
-        string $modelKey,
+        int $modelKey,
         int $limit,
     ): void;
 

@@ -15,7 +15,7 @@ class ProcessRemoveDuplicates implements ShouldQueue
      */
     public function __construct(
         private string $modelClass,
-        private string $modelKey,
+        private int $modelKey,
         private array $changes,
     ) {}
 

@@ -28,13 +28,33 @@ class ElogquentEntry extends Model
     public function restore(): void
     {
         $this->getRelation('modelChanged')
-            ->update([$this->getAttribute('column') => $this->getAttribute('value')]);
+            ->update([$this->getColumn() => $this->getValue()]);
     }
 
     #[Override]
     public function getConnectionName(): ?string
     {
         return config('elogquent.database_connection');
+    }
+
+    public function getModelClassName(): string
+    {
+        return $this->getAttribute('model_type');
+    }
+
+    public function getModelId(): int
+    {
+        return $this->getAttribute('model_id');
+    }
+
+    public function getColumn(): string
+    {
+        return $this->getAttribute('column');
+    }
+
+    public function getValue(): string
+    {
+        return $this->getAttribute('value');
     }
 
     public static function newFactory(): ElogquentEntryFactory

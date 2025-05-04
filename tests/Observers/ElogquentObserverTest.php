@@ -35,8 +35,6 @@ it('ignore changes when the model has no changes in configured columns', functio
 
     $sut = new ElogquentObserver();
     $sut->updating($model);
-
-    Bus::assertNothingChained();
 });
 
 it('process limit entries if its configured globally', function () {

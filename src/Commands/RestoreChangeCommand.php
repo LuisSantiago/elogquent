@@ -105,9 +105,10 @@ class RestoreChangeCommand extends Command
                 ->orderBy('id', 'desc')
                 ->limit(self::LIMIT_COLUMN_CHANGES)
                 ->get()
-                ->mapWithKeys(fn (ElogquentEntry $entry) => [$entry->getAttribute('value') => sprintf('%s (%s)',
-                    $this->formatWithColor('green', $entry->getAttribute('value')),
-                    $entry->getAttribute('created_at')),
+                ->mapWithKeys(fn (ElogquentEntry $entry) => [$entry->getValue() => sprintf('%s (%s)',
+                    $this->formatWithColor('green', $entry->getValue()),
+                    $this->formatWithColor('white', $entry->getAttribute('created_at')),
+                    ),
                 ])
                 ->toArray();
 

@@ -30,7 +30,7 @@ return [
     | Define the database connection to use for storing the change history.
     |
     */
-    'database_connection' => env('ELOGQUENT_DATABASE_CONNECTION', 'mysql'),
+    'database_connection' => env('ELOGQUENT_DATABASE_CONNECTION', config('database.default')),
 
     /*
     |--------------------------------------------------------------------------

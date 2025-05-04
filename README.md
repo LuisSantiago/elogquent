@@ -1,4 +1,3 @@
-
 <p align="center">
     <img src="assets/logo.png">
 </p>
@@ -6,10 +5,16 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/luissantiago/elogquent.svg?style=flat-square)](https://packagist.org/packages/luissantiago/elogquent)
 [![Total Downloads](https://img.shields.io/packagist/dt/luissantiago/elogquent.svg?style=flat-square)](https://packagist.org/packages/luissantiago/elogquent)
 [![Tests](https://github.com/luissantiago/elogquent/actions/workflows/run-tests.yml/badge.svg)](https://github.com/luissantiago/elogquent/actions/workflows/run-tests.yml)
-[![Lint](https://github.com/luissantiago/elogquent/actions/workflows/lint.yml/badge.svg)](https://github.com/luissantiago/elogquent/actions/workflows/lint.yml)
+[![Lint](https://github.com/luissantiago/elogquent/actions/workflows/code-quality.yml/badge.svg)](https://github.com/luissantiago/elogquent/actions/workflows/code-quality.yml)
 
-Elogquent is a Laravel package that automatically tracks and stores all changes made to your Eloquent models. It provides a complete history of modifications, allowing you to restore previous states of your models.
+Elogquent is a Laravel package that automatically tracks and stores all changes made to your Eloquent models. It
+provides a complete history of modifications, allowing you to restore previous states of your models.
 
+### Preview of restore:
+
+<p align="center">
+  <img src="assets/RestoreChange.gif" alt="RestoreChange"/>
+</p>
 ## Features
 
 - 🔄 Automatic tracking of model changes
@@ -18,7 +23,7 @@ Elogquent is a Laravel package that automatically tracks and stores all changes 
 - ⏮️ Model state restoration
 - 🧹 Duplicate change removal
 - 👤 User attribution for changes
-- 🛡️ Transaction-safe operations
+- 🛡️ Queue operations
 
 ## Installation
 
@@ -45,6 +50,7 @@ php artisan migrate
 ### Basic Usage
 
 Add the `Elogquent` trait to your model and any changes to your model will be automatically tracked:
+
 ```php
 use Elogquent\Traits\Elogquent;
 use Illuminate\Database\Eloquent\Model;
@@ -73,58 +79,46 @@ $modelChange = ModelChange::find(1);
 $modelChange->restore();
 ```
 
-
 ## Configuration
 
-This will create a config/elogquent.php file. Below are the key options you can configure:
+Below are the key options you can configure in the `elogquent.php` configuration file:
 
 ---
+⚙️ Basic Settings
 
-### `included_columns`
+| Option                | Description                                         | Default           |
+|-----------------------|-----------------------------------------------------|-------------------|
+| `enabled`             | Enable or disable Elogquent globally.               | `true`            |
+| `store_user_id`       | Store the authenticated user's ID with each change. | `true`            |
+| `database_connection` | The database connection used for change history.    | Laravel’s default |    
 
-```php
-'included_columns' => [],
-```
+📋 Column Filtering
 
-**Description:**  
-A whitelist of attributes to be tracked in the change history.  
-If empty, **all attributes** will be recorded (excluding those listed in `excluded_columns`).
+| Option             | Description                                                                                                                                             |
+|--------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `included_columns` | List of specific columns to track. If empty, all are tracked (except excluded).                                                                         |
+| `excluded_columns` | Columns to ignore (e.g., sensitive or irrelevant ones). Defaults include:<br>`password`, `remember_token`, `api_token`, `secret`, `token`, `updated_at` |
 
-**Example:**
+🧹 History Optimization
 
-```php
-'included_columns' => ['name', 'email', 'status'],
-```
----
-### `excluded_columns`
-```php
-'excluded_columns' => [
-    'password',
-    'remember_token',
-    'api_token',
-    'secret',
-    'token',
-    'updated_at',
-],
-```
+| Option                       | Description                                                        |
+|------------------------------|--------------------------------------------------------------------|
+| `remove_previous_duplicates` | Avoid logging identical consecutive states. Keeps only the latest. |
 
-**Description:**  
-Blacklist of fields that will be ignored from tracking. Useful for skipping sensitive or irrelevant fields.
+📦 Change Limits
 
----
+| Option                | Description                                                                                   |
+|-----------------------|-----------------------------------------------------------------------------------------------|
+| `changes_limit`       | Maximum number of total stored changes globally.                                              |
+| `model_changes_limit` | Set limits per model class (overrides global).<br>Example:<br>`App\Models\Post::class => 100` |
 
-### `remove_previous_duplicates`
+🧵 Queue Settings
 
-```php
-'remove_previous_duplicates' => env('ELOGQUENT_REMOVE_DUPLICATES', true),
-```
-
-**Description:**  
-When enabled, repeated changes with identical values will not be stored again.  
-This reduces redundancy and log noise by keeping only the latest entry for a given model state.
-
-
-
+| Option             | Description                                   | Default                             |
+|--------------------|-----------------------------------------------|-------------------------------------|
+| `queue.delay`      | Delay (in seconds) before processing updates. | `0`                                 |
+| `queue.connection` | The queue connection to use.                  | Laravel’s default (`queue.default`) |
+| `queue.queue`      | Name of the queue to handle change jobs.      | `null`                              |
 
 ## Security
 
@@ -140,7 +134,7 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 ## Credits
 
-- [Your Name](https://github.com/luissantiago)
+- [Luis Santiago](https://github.com/luissantiago)
 
 ## Support
 
