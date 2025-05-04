@@ -15,7 +15,7 @@ it('model uses the trait', function () {
 });
 
 it('registers event listeners when package is enabled', function () {
-    $model = new TestFakeModel;
+    $model = new TestFakeModel();
     $model::bootTraits();
     $model::boot();
 

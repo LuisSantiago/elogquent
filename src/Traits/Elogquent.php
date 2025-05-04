@@ -2,7 +2,7 @@
 
 namespace Elogquent\Traits;
 
-use Elogquent\Models\ModelChange;
+use Elogquent\Models\ElogquentEntry;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait Elogquent
@@ -18,6 +18,6 @@ trait Elogquent
 
     public function allChanges(): MorphMany
     {
-        return $this->morphMany(ModelChange::class, 'model');
+        return $this->morphMany(ElogquentEntry::class, 'model');
     }
 }

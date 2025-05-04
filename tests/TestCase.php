@@ -2,7 +2,9 @@
 
 namespace Elogquent\Tests;
 
-use Elogquent\Providers\ElogquentServiceProvider;
+use Elogquent\ElogquentServiceProvider;
+use Illuminate\Database\Eloquent\Model;
+use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -10,6 +12,19 @@ class TestCase extends Orchestra
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+    }
+
+    protected function getEnvironmentSetUp($app): void
+    {
+        $app['config']->set('database.default', 'sqlite');
+        $app['config']->set('database.connections.sqlite', [
+            'driver' => 'sqlite',
+            'database' => ':memory:',
+            'prefix' => '',
+        ]);
+        $app['config']->set('elogquent.database_connection', 'sqlite');
     }
 
     protected function getPackageProviders($app): array
@@ -19,8 +34,15 @@ class TestCase extends Orchestra
         ];
     }
 
-    public function getEnvironmentSetUp($app): void
+    public function mockModel(array $changes = ['name' => 'Luis'], int $key = 1): object
     {
-        config()->set('database.default', 'testing');
+        $model = Mockery::mock(Model::class);
+        $model->expects('getKey')
+            ->andReturn($key);
+
+        $model->expects('getDirty')
+            ->andReturn($changes);
+
+        return $model;
     }
 }

@@ -2,37 +2,92 @@
 
 namespace Elogquent\Observers;
 
-use Elogquent\Contracts\ElogquentRepositoryInterface;
+use Elogquent\Exceptions\ElogquentError;
+use Elogquent\Jobs\ProcessClearExceededLimit;
+use Elogquent\Jobs\ProcessCreateEntry;
+use Elogquent\Jobs\ProcessRemoveDuplicates;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Bus;
+use Throwable;
 
 class ElogquentObserver
 {
-    public function __construct(private ElogquentRepositoryInterface $repository) {}
-
     public function updating(Model $model): void
     {
-        $changes = $this->getChanges($model);
-        if (empty($changes)) {
+        $modelKey = $model->getKey();
+        $modelClass = get_class($model);
+        $changes = $this->getChanges($model->getDirty());
+
+        if ($changes->isEmpty()) {
             return;
         }
-        $userId = config('elogquent.store_user_id') ? auth()->user()?->getAuthIdentifier() : null;
 
-        $this->repository->create(model: $model, userId: $userId);
+        $jobs = [];
+
+        if (config('elogquent.remove_previous_duplicates')) {
+            $jobs[] = new ProcessRemoveDuplicates(
+                $modelClass,
+                $modelKey,
+                $changes->toArray(),
+            );
+        }
+
+        $jobs[] = new ProcessCreateEntry(
+            $modelClass,
+            $modelKey,
+            $changes->toArray(),
+        );
+
+        $limit = $this->getLimit($modelClass);
+        if ($limit) {
+            $jobs[] = new ProcessClearExceededLimit(
+                $modelClass,
+                $modelKey,
+                $limit,
+            );
+        }
+
+        $this->dispatchJobs($jobs);
     }
 
-    private function getChanges(Model $model): array
+    private function dispatchJobs(array $jobs): void
     {
-        $dirty = $model->getDirty();
+        Bus::chain($jobs)
+            ->onConnection(config('elogquent.queue.connection'))
+            ->onQueue(config('elogquent.queue.queue'))
+            ->delay(config('elogquent.queue.delay'))
+            ->catch(function (Throwable $exception) {
+                throw new ElogquentError($exception->getMessage());
+            })
+            ->dispatch();
+    }
 
+    private function getLimit(string $modelClass): ?int
+    {
+        $limit = config('elogquent.changes_limit');
+        $limitPerModel = config('elogquent.model_changes_limit');
+        if (is_array($limitPerModel) && isset($limitPerModel[$modelClass])) {
+            $limit = $limitPerModel[$modelClass];
+        }
+
+        return $limit;
+    }
+
+    private function getChanges(array $changes): Collection
+    {
         $included = config('elogquent.included_columns', []);
-        if (! empty($included)) {
-            $dirty = array_intersect_key($dirty, array_flip($included));
-        }
         $excluded = config('elogquent.excluded_columns', []);
+
+        $changes = collect($changes);
+
+        if (! empty($included)) {
+            $changes = $changes->intersectByKeys(array_flip($included));
+        }
         if (! empty($excluded)) {
-            $dirty = array_diff_key($dirty, array_flip($excluded));
+            $changes = $changes->diffKeys(array_flip($excluded));
         }
 
-        return $dirty;
+        return $changes;
     }
 }

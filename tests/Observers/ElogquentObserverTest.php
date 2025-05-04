@@ -1,56 +1,71 @@
 <?php
 
-use Elogquent\Contracts\ElogquentRepositoryInterface;
+use Elogquent\Jobs\ProcessClearExceededLimit;
+use Elogquent\Jobs\ProcessCreateEntry;
+use Elogquent\Jobs\ProcessRemoveDuplicates;
 use Elogquent\Observers\ElogquentObserver;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Config;
 
-it('stores a change when the model has changes in configured columns', function () {
-    $model = Mockery::mock(Model::class);
-    $model->expects('getDirty')
-        ->andReturn(['name' => 'Foo']);
+beforeEach(function () {
+    Config::set('elogquent.enabled', true);
+    Bus::fake();
+});
 
-    $repository = Mockery::mock(ElogquentRepositoryInterface::class);
-    $repository->expects('create')
-        ->with($model, null);
+it('execute the process when the model has changes in configured columns with default config', function () {
+    $model = $this->mockModel();
 
-    $observer = new ElogquentObserver($repository);
-    $observer->updating($model);
+    Config::set('elogquent.included_columns', ['name']);
+    Config::set('elogquent.excluded_columns', []);
+
+    $sut = new ElogquentObserver();
+    $sut->updating($model);
+
+    Bus::assertChained([
+        ProcessRemoveDuplicates::class,
+        ProcessCreateEntry::class,
+    ]);
 });
 
 it('ignore changes when the model has no changes in configured columns', function () {
-    $model = Mockery::mock(Model::class);
-    $model->expects('getDirty')
-        ->andReturn([]);
+    $model = $this->mockModel();
 
-    $repository = Mockery::mock(ElogquentRepositoryInterface::class);
-    $repository->expects('create')
-        ->never();
+    Config::set('elogquent.included_columns', []);
+    Config::set('elogquent.excluded_columns', ['name']);
 
-    $observer = new ElogquentObserver($repository);
-    $observer->updating($model);
+    $sut = new ElogquentObserver();
+    $sut->updating($model);
+
+    Bus::assertNothingChained();
 });
 
-it('stores a the user id if its configured', function () {
-    Config::set('elogquent.store_user_id', true);
-    $userId = 'userId';
-    $model = Mockery::mock(Model::class);
-    $model->expects('getDirty')
-        ->andReturn(['column' => 'getChange']);
+it('process limit entries if its configured globally', function () {
+    $model = $this->mockModel();
+    Config::set('elogquent.changes_limit', 1);
 
-    $repository = Mockery::mock(ElogquentRepositoryInterface::class);
-    $repository->expects('create')
-        ->with($model, $userId);
+    $sut = new ElogquentObserver();
+    $sut->updating($model);
 
-    $authenticatable = Mockery::mock(Authenticatable::class);
-    $authenticatable->expects('getAuthIdentifier')
-        ->andReturn($userId);
+    Bus::assertChained([
+        ProcessRemoveDuplicates::class,
+        ProcessCreateEntry::class,
+        ProcessClearExceededLimit::class,
+    ]);
+});
 
-    Auth::expects('user')
-        ->andReturn($authenticatable);
+it('process limit entries if its configured for the model', function () {
+    $model = $this->mockModel();
+    Config::set('elogquent.remove_previous_duplicates', true);
+    Config::set('elogquent.model_changes_limit', [
+        get_class($model) => 1,
+    ]);
 
-    $observer = new ElogquentObserver($repository);
-    $observer->updating($model);
+    $sut = new ElogquentObserver();
+    $sut->updating($model);
+
+    Bus::assertChained([
+        ProcessRemoveDuplicates::class,
+        ProcessCreateEntry::class,
+        ProcessClearExceededLimit::class,
+    ]);
 });

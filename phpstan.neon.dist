@@ -16,3 +16,4 @@ parameters:
         - identifier: function.alreadyNarrowedType
         - identifier: trait.unused
         - identifier: larastan.noEnvCallsOutsideOfConfig
+        - identifier: larastan.noUnnecessaryCollectionCall

@@ -6,6 +6,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/luissantiago/elogquent.svg?style=flat-square)](https://packagist.org/packages/luissantiago/elogquent)
 [![Total Downloads](https://img.shields.io/packagist/dt/luissantiago/elogquent.svg?style=flat-square)](https://packagist.org/packages/luissantiago/elogquent)
 [![Tests](https://github.com/luissantiago/elogquent/actions/workflows/run-tests.yml/badge.svg)](https://github.com/luissantiago/elogquent/actions/workflows/run-tests.yml)
+[![Lint](https://github.com/luissantiago/elogquent/actions/workflows/lint.yml/badge.svg)](https://github.com/luissantiago/elogquent/actions/workflows/lint.yml)
 
 Elogquent is a Laravel package that automatically tracks and stores all changes made to your Eloquent models. It provides a complete history of modifications, allowing you to restore previous states of your models.
 
@@ -30,7 +31,7 @@ composer require elogquent/elogquent
 Install the package:
 
 ```bash
-php artisan elogquent:install"
+php artisan elogquent:install
 ```
 
 Run the migrations:
