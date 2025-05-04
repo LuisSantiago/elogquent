@@ -108,7 +108,7 @@ class RestoreChangeCommand extends Command
                 ->mapWithKeys(fn (ElogquentEntry $entry) => [$entry->getValue() => sprintf('%s (%s)',
                     $this->formatWithColor('green', $entry->getValue()),
                     $this->formatWithColor('white', $entry->getAttribute('created_at')),
-                    ),
+                ),
                 ])
                 ->toArray();
 
