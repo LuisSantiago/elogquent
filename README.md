@@ -13,7 +13,7 @@ provides a complete history of modifications, allowing you to restore previous s
 ### Preview of restore:
 
 <p align="center">
-  <img src="assets/RestoreChange.gif" alt="RestoreChange"/>
+  <img src="assets/RestoreChanges.gif" alt="RestoreChanges"/>
 </p>
 
 ## Features
