@@ -46,27 +46,39 @@ class ElogquentDatabaseRepository implements ElogquentRepositoryInterface
         int $modelKey,
         array $changes,
     ): void {
-        foreach ($changes as $column => $value) {
-            ElogquentEntry::query()
-                ->where('model_id', $modelKey)
-                ->where('model_type', $modelClass)
-                ->where('column', $column)
-                ->where('value', $value)
-                ->delete();
+        try {
+            foreach ($changes as $column => $value) {
+                ElogquentEntry::query()
+                    ->where('model_id', $modelKey)
+                    ->where('model_type', $modelClass)
+                    ->where('column', $column)
+                    ->where('value', $value)
+                    ->delete();
+            }
+        } catch (Exception $e) {
+            throw new ElogquentDatabaseError(
+                "Elogquent remove changes error: {$e->getMessage()}"
+            );
         }
     }
 
     #[Override]
     public function removeExceededLimit(string $modelClass, int $modelKey, int $limit): void
     {
-        $oldestElogquentEntryId = ElogquentEntry::query()
-            ->where('model_id', $modelKey)
-            ->where('model_type', $modelClass)
-            ->offset($limit)
-            ->limit(1)
-            ->orderBy('id', 'desc')
-            ->pluck('id')
-            ->pop();
+        try {
+            $oldestElogquentEntryId = ElogquentEntry::query()
+                ->where('model_id', $modelKey)
+                ->where('model_type', $modelClass)
+                ->offset($limit)
+                ->limit(1)
+                ->orderBy('id', 'desc')
+                ->pluck('id')
+                ->pop();
+        } catch (Exception $e) {
+            throw new ElogquentDatabaseError(
+                "Get the last model for remove duplicates error: {$e->getMessage()}"
+            );
+        }
 
         if (empty($oldestElogquentEntryId)) {
             return;
@@ -82,6 +94,12 @@ class ElogquentDatabaseRepository implements ElogquentRepositoryInterface
     #[Override]
     public function restoreChanges(Model $model, array $changes): void
     {
-        $model->update($changes);
+        try {
+            $model->update($changes);
+        } catch (Exception $e) {
+            throw new ElogquentDatabaseError(
+                "Restore changes error: {$e->getMessage()}"
+            );
+        }
     }
 }

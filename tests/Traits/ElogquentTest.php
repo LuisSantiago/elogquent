@@ -21,3 +21,11 @@ it('registers event listeners when package is enabled', function () {
 
     expect(Event::hasListeners('eloquent.updating: '.TestFakeModel::class))->toBeTrue();
 });
+
+it('model with the trait has the allChanges the relationship', function () {
+    $model = new TestFakeModel();
+    $model::bootTraits();
+    $model::boot();
+
+    expect(TestFakeModel::class)->toHaveMethod('allChanges');
+});

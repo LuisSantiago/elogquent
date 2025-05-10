@@ -2,10 +2,12 @@
     <img src="assets/logo.png">
 </p>
 
+[![PHP Version](https://img.shields.io/packagist/php-v/luissantiago/elogquent)](https://packagist.org/packages/luissantiago/elogquent)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/luissantiago/elogquent.svg?style=flat-square)](https://packagist.org/packages/luissantiago/elogquent)
 [![Total Downloads](https://img.shields.io/packagist/dt/luissantiago/elogquent.svg?style=flat-square)](https://packagist.org/packages/luissantiago/elogquent)
 [![Tests](https://github.com/luissantiago/elogquent/actions/workflows/run-tests.yml/badge.svg)](https://github.com/luissantiago/elogquent/actions/workflows/run-tests.yml)
 [![Lint](https://github.com/luissantiago/elogquent/actions/workflows/code-quality.yml/badge.svg)](https://github.com/luissantiago/elogquent/actions/workflows/code-quality.yml)
+![Test Coverage](https://img.shields.io/badge/coverage-91%25-brightgreen)
 
 Elogquent is a Laravel package that automatically tracks and stores all changes made to your Eloquent models. It
 provides a complete history of modifications, allowing you to restore previous states of your models.
