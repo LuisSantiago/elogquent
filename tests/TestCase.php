@@ -14,7 +14,13 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadMigrationsFrom(
+            __DIR__.'/../database/migrations',
+        );
+        $this->loadMigrationsFrom(
+            __DIR__.'/database/migrations',
+        );
+
     }
 
     protected function getEnvironmentSetUp($app): void
@@ -26,6 +32,7 @@ class TestCase extends Orchestra
             'prefix' => '',
         ]);
         $app['config']->set('elogquent.database_connection', 'sqlite');
+        $app['config']->set('elogquent.queue', 'sync');
     }
 
     protected function getPackageProviders($app): array
