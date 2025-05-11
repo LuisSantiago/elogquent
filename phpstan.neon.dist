@@ -1,0 +1,19 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: 5
+    paths:
+        - src
+        - config
+        - database
+    excludePaths:
+        - tests/*/data/*
+    tmpDir: build/phpstan
+    checkOctaneCompatibility: true
+    checkModelProperties: true
+    ignoreErrors:
+        - identifier: function.alreadyNarrowedType
+        - identifier: trait.unused
+        - identifier: larastan.noEnvCallsOutsideOfConfig
+        - identifier: larastan.noUnnecessaryCollectionCall
