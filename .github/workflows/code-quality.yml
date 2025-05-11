@@ -7,14 +7,12 @@ on:
     paths:
       - '**.php'
       - 'composer.json'
-      - 'psalm.xml'
       - 'pint.json'
       - 'phpstan.neon.dist'
   pull_request:
     paths:
       - '**.php'
       - 'composer.json'
-      - 'psalm.xml'
       - 'pint.json'
       - 'phpstan.neon.dist'
 
@@ -60,24 +58,6 @@ jobs:
 
       - name: Run Pint (check mode)
         run: vendor/bin/pint --test
-
-  psalm:
-    name: Run Psalm
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
-
-      - name: Run Psalm
-        run: vendor/bin/psalm
 
   phpstan:
     name: Run PHPStan
