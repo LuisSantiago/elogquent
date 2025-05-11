@@ -19,7 +19,7 @@ class ElogquentObserver
         $modelClass = get_class($model);
         $changes = $this->getChanges($model->getDirty());
 
-        if ($changes->isEmpty()) {
+        if (is_null($modelKey) || $changes->isEmpty()) {
             return;
         }
 

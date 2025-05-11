@@ -1,6 +1,6 @@
 <?php
 
-use Elogquent\Tests\Traits\TestFakeModel;
+use Elogquent\Tests\Models\TestFakeModel;
 use Elogquent\Traits\Elogquent;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;

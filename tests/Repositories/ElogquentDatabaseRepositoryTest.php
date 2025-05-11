@@ -1,7 +1,10 @@
 <?php
 
+use Elogquent\Exceptions\ElogquentDatabaseError;
 use Elogquent\Models\ElogquentEntry;
 use Elogquent\Repositories\ElogquentDatabaseRepository;
+use Elogquent\Tests\Models\TestFakeModel;
+use Illuminate\Support\Facades\Schema;
 
 it('create new entry', function () {
     Config::set('elogquent.included_columns', ['name']);
@@ -53,3 +56,49 @@ it('delete duplicates', function () {
 
     $this->assertDatabaseCount('elogquent_entries', 0);
 });
+
+it('restore changes', function () {
+    $column = 'name';
+    $value = 'foo';
+
+    $model = TestFakeModel::create(['name' => 'Luis']);
+
+    $sut = new ElogquentDatabaseRepository();
+    $sut->restoreChanges($model, [$column => $value]);
+
+    $this->assertDatabaseHas('fake_models', [
+        'id' => $model->id,
+        $column => $value,
+    ]);
+});
+
+it('fail create', function () {
+    Schema::drop('elogquent_entries');
+
+    $sut = new ElogquentDatabaseRepository();
+    $sut->create(1, 1, [1 => 2]);
+
+})->throws(ElogquentDatabaseError::class, 'Error storing in database:');
+
+it('fail remove changes', function () {
+    Schema::drop('elogquent_entries');
+
+    $sut = new ElogquentDatabaseRepository();
+    $sut->removeChanges('Model', 1, ['name' => 'Luis']);
+
+})->throws(ElogquentDatabaseError::class, 'Elogquent remove changes error:');
+
+it('fail remove exceded limit', function () {
+    Schema::drop('elogquent_entries');
+
+    $sut = new ElogquentDatabaseRepository();
+    $sut->removeExceededLimit('Model', 1, 1);
+
+})->throws(ElogquentDatabaseError::class, 'Get the last model for remove duplicates error:');
+
+it('fail restore changes', function () {
+    $model = TestFakeModel::create(['name' => 'Luis']);
+    $sut = new ElogquentDatabaseRepository();
+    $sut->restoreChanges($model, ['foo' => 'bar']);
+
+})->throws(ElogquentDatabaseError::class, 'Restore changes error:');
