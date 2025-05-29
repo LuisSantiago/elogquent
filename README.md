@@ -42,7 +42,7 @@ It provides a complete audit trail and allows restoring models to previous state
 Install the package via Composer:
 
 ```bash
-composer require elogquent/elogquent
+composer require luissantiago/elogquent
 ```
 
 Publish config and install:
